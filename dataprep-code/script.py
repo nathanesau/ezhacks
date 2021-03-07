@@ -16,15 +16,14 @@ from dataprep.connector import connect
 BASEDIR = os.path.dirname(os.path.realpath(__file__))
 DATA_FOLDER = f"{BASEDIR}/../data/company_data"
 
-async def get_company_data(company_name):
-    # requests syntax
-    # response = requests.get((
-    #     f"https://finnhub.io/api/v1/stock/candle?resolution=W&from={int(datetime(2020,1,1).timestamp())}"
-    #     f"&to={int(datetime(2021,1,1).timestamp())}&symbol={company_name}&token=c11tv0v48v6p2grlkudg"
-    # ))
-    # data = response.json()
-    conn_finnhub = connect("../ezhacks-data")
-    data = await conn_finnhub.query('stock_data', symbol=company_name, token="c11tv0v48v6p2grlkudg", from_=int(datetime(2020,1,1).timestamp()), to=int(datetime(2021,1,1).timestamp()))
+@asyncio.coroutine
+async def get_company_data(symbol):
+    conn_finnhub = connect(f"{BASEDIR}/../dataprep-code", _auth={"access_token": "c11tv0v48v6p2grlkudg"})
+    data = await conn_finnhub.query('stock_data',
+                                    symbol=symbol,
+                                    from_=int(datetime(2020,1,1).timestamp()),
+                                    to=int(datetime(2021,1,1).timestamp()),
+                                    resolution='W')
     return data
 
 def get_company_names():
@@ -42,7 +41,7 @@ def save_companies_data():
 
     for company in companies:
         print(f"saving company: {company}")
-        data = get_company_data(company)
+        data = asyncio.run(get_company_data(company))
         filePath = os.path.join(DATA_FOLDER, company.strip('\n'))
         saveToFile(filePath, data)
 
@@ -76,18 +75,8 @@ if __name__ == "__main__":
     
     # uncomment to collect all data
     # upload data to https://ezhacks.nyc3.digitaloceanspaces.com
-    path = os.path.join(DATA_FOLDER, "MC")
-    loop = asyncio.get_event_loop()
-    data = loop.run_until_complete(get_company_data("MC"))
-    print(data.c)
-    #data = asyncio.run(get_company_data("MC"))
-    saveToFile(path, data)
-    #path = os.path.join(DATA_FOLDER, "BRK.A")
-    #saveToFile(path, get_company_data("BRK.A"))
-    #save_companies_data()
+    save_companies_data()
 
-    # makes the plots
-    """
     differences = []
     volatilities = []
 
@@ -102,46 +91,42 @@ if __name__ == "__main__":
     volatilities.sort(key=lambda el: el["year_volatility"], reverse=True)
     differences.sort(key=lambda el: el["year_difference"], reverse=True)
 
-    # print(f"Top Winners : {differences[:30]}")
-    # print(f"Top Losers : {differences[-1:-30:-1]}")
+    print(f"Top Winners : {differences[:30]}")
+    print(f"Top Losers : {differences[-1:-30:-1]}")
 
-    # uncomment to plot winners
-    #winners = [e["company_name"] for e in differences[:10]]
-    #for winner in winners:
-    #    company_data = read_company_data(winner)
-    #    data = company_data['c']
-    #    initial = data[0]
-    #    for i in range(len(data)): data[i] = (data[i] / initial - 1) * 100
-    #    plt.plot(company_data['c'], label=winner)
-    #plt.legend()
-    #plt.xlabel("Week of 2020")
-    #plt.ylabel("Percent Change in Price")
-    #plt.savefig('out.png')
+    winners = [e["company_name"] for e in differences[:10]]
+    for winner in winners:
+       company_data = read_company_data(winner)
+       data = company_data['c']
+       initial = data[0]
+       for i in range(len(data)): data[i] = (data[i] / initial - 1) * 100
+       plt.plot(company_data['c'], label=winner)
+    plt.legend()
+    plt.xlabel("Week of 2020")
+    plt.ylabel("Percent Change in Price")
+    plt.savefig('out.png')
 
-    # uncomment to plot losers
-    #losers = [e["company_name"] for e in differences[-1:-10:-1]]
-    #for loser in losers:
-    #    company_data = read_company_data(loser)
-    #    data = company_data['c']
-    #    initial = data[0]
-    #    for i in range(len(data)): data[i] = (data[i] / initial - 1) * 100
-    #    plt.plot(company_data['c'], label=loser)
-    #plt.legend()
-    #plt.xlabel("Week of 2020")
-    #plt.ylabel("Percent Change in Price")
-    #plt.savefig('out.png')
+    losers = [e["company_name"] for e in differences[-1:-10:-1]]
+    for loser in losers:
+       company_data = read_company_data(loser)
+       data = company_data['c']
+       initial = data[0]
+       for i in range(len(data)): data[i] = (data[i] / initial - 1) * 100
+       plt.plot(company_data['c'], label=loser)
+    plt.legend()
+    plt.xlabel("Week of 2020")
+    plt.ylabel("Percent Change in Price")
+    plt.savefig('out.png')
 
-    # uncomment to plot dramatics
-    #dramatics = [(e["company_name"], e["year_volatility"]) for e in volatilities[:10]]
-    #for value in dramatics:
-    #    dramatic, volatility = value
-    #    company_data = read_company_data(dramatic)
-    #    data = company_data['c']
-    #    initial = data[0]
-    #    for i in range(len(data)): data[i] = (data[i] / initial - 1) * 100
-    #    plt.plot(company_data['c'], label=f"{dramatic} ({volatility} %)")
-    #plt.legend()
-    #plt.xlabel("Week of 2020")
-    #plt.ylabel("Percent Change in Price")
-    #plt.savefig('out.png')
-    """
+    dramatics = [(e["company_name"], e["year_volatility"]) for e in volatilities[:10]]
+    for value in dramatics:
+       dramatic, volatility = value
+       company_data = read_company_data(dramatic)
+       data = company_data['c']
+       initial = data[0]
+       for i in range(len(data)): data[i] = (data[i] / initial - 1) * 100
+       plt.plot(company_data['c'], label=f"{dramatic} ({volatility} %)")
+    plt.legend()
+    plt.xlabel("Week of 2020")
+    plt.ylabel("Percent Change in Price")
+    plt.savefig('out.png')

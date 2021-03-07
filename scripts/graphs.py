@@ -72,11 +72,7 @@ if __name__ == "__main__":
 
     # uncomment to collect all data
     # upload data to https://ezhacks.nyc3.digitaloceanspaces.com
-    #path = os.path.join(DATA_FOLDER, "MC")
-    #saveToFile(path, get_company_data("MC"))
-    #path = os.path.join(DATA_FOLDER, "BRK.A")
-    #saveToFile(path, get_company_data("BRK.A"))
-    #save_companies_data()
+    save_companies_data()
 
     differences = []
     volatilities = []

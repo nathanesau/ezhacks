@@ -1,8 +1,12 @@
 {
     "version": 1,
     "request": {
-        "url": "https://finnhub.io/api/v1/calendar/earnings",
+        "url": "https://finnhub.io/api/v1/stock/candle",
         "method": "GET",
+        "authorization": {
+            "type": "QueryParam",
+            "keyParam": "token"
+        },
         "params": {
             "symbol": false,
             "from_": false,
@@ -15,8 +19,7 @@
                 ]
             },
             "to": false,
-            "resolution": false,
-            "token": false
+            "resolution": false
         }
     },
     "response": {
@@ -25,19 +28,19 @@
         "schema": {
             "c": {
                 "target": "$.c",
-                "type": "array"
+                "type": "string"
             },
             "h": {
                 "target": "$.h",
-                "type": "array"
+                "type": "string"
             },
             "l": {
                 "target": "$.l",
-                "type": "array"
+                "type": "string"
             },
             "o": {
                 "target": "$.o",
-                "type": "array"
+                "type": "string"
             },
             "s": {
                 "target": "$.s",
@@ -45,7 +48,7 @@
             },
             "t": {
                 "target": "$.t",
-                "type": "array"
+                "type": "string"
             }
         },
         "orient": "records"
