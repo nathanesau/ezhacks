@@ -30,7 +30,7 @@ async def get_company_data(company_name):
 def get_company_names():
     companies = []
     # includes S and P 500 and Zoom
-    with open(f"{BASEDIR}/companies_list.txt", "r") as f:
+    with open(f"{BASEDIR}/../data/companies_list.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
             companies.append(line.strip('\n'))
