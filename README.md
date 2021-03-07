@@ -2,7 +2,7 @@
 
 EZHacks2021 hackathon at Simon Fraser University.
 
-We built a web app. It is live at http://ezhacks2021.strangled.net:5000.
+We built a web app. It is live at http://ezhacks2021.strangled.net.
 
 <!-- host ip: 138.197.155.240 -->
 
