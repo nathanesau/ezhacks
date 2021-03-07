@@ -1,3 +1,6 @@
+"""
+populate sqlite3 database for web-app
+"""
 import sqlite3
 
 SYMBOLS = [
