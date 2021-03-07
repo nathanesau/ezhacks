@@ -4,6 +4,9 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
 
 {% block title %}
@@ -22,6 +25,7 @@ ezhacks2021
                 <li><a href="{{ url_for('main.explore') }}">Explore</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="https://github.com/nathanesau/ezhacks">GitHub</a></li>
                 <li><a href="/about">About</a></li>                
             </ul>
         </div>
@@ -44,6 +48,15 @@ ezhacks2021
 
     {% block app_content %}{% endblock %}
 </div>
+
+{% block footer %}
+<div class="container">
+<div id="footer">
+    <hr>
+    <p>powered by <a href="https://github.com/pallets/flask">flask</a></p>
+</div>
+{% endblock %}
+
 {% endblock %}
 
 {% block scripts %}

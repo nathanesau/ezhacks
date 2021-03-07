@@ -4,24 +4,93 @@
 {% block app_content %}
 <h1>EZHacks2021</h1>
 
-<p>EZHacks2021 site powered by <code>dataprep</code> and <code>flask</code>. By <a href="https://github.com/mshvarts">Max Shvarts</a>, <a href="https://github.com/shuimingzi">Shumingzi</a> and <a href="https://github.com/nathanesau">Nathan Esau</a>.</p>
+<br>
+<p>EZHacks2021 site using <a href="https://github.com/sfu-db/dataprep">dataprep</a>.
 
 <ul>
-<li>The site is related to the stock market. We use <code>finnhub</code> to collect the stock data.</li>
+<li>The site is related to the stock market. We use <a href="https://finnhub.io/">finnhub</a> to collect the stock data.</li>
 <li>We show the winners and losers from the pandemic.</li>
 <li>We show that the wealth of the world's richest people skyrocketted during the pandemic.</li>
 </ul>
 
-<h2>Part 1: Timeline of Pandemic</h2>
+<p>Be sure to visit the <a href="{{ url_for('main.explore') }}">Explore</a> page to view the data for each company.</p>
 
-<img src="static/timeline.PNG" width="75%">
+<br>
+<h2>Winners of Pandemic</h2>
 
-<h2>Part 2: Winners and Losers of the Pandemic</h2>
+<br>
+<p>
+These are the companies with largest increase in Market Cap during 2020.
+</p>
 
-<img src="static/plot.PNG" width="75%">
+<body>
+    <pre><code class="python">winners = [e["company_name"] for e in differences[:10]]
+for winner in winners:
+    company_data = read_company_data(winner)
+    data = company_data['c']
+    initial = data[0]
+for i in range(len(data)):
+    data[i] = (data[i] / initial - 1) * 100
+plt.plot(company_data['c'], label=winner)
+plt.legend()
+plt.xlabel("Week of 2020")
+plt.ylabel("Percent Change in Price")
+plt.show()</code></pre>
+  </body>
 
-<h2>Part 3: The World's Wealthiest People</h2>
+<br>
+<div class="editorContainer" id="script">
+</div>
 
-<img src="static/primary_holding.PNG" width="75%">
+<img src="static/winners.PNG" width="75%">
+
+<br>
+<h2>Losers of Pandemic</h2>
+
+<br>
+<p>
+These are the companies with largest decrease in Market Cap during 2020.
+</p>
+
+<body>
+    <pre><code class="python">losers = [e["company_name"] for e in differences[-1:-10:-1]]
+for loser in losers:
+    company_data = read_company_data(winner)
+    data = company_data['c']
+    initial = data[0]
+for i in range(len(data)):
+    data[i] = (data[i] / initial - 1) * 100
+plt.plot(company_data['c'], label=loser)
+plt.legend()
+plt.xlabel("Week of 2020")
+plt.ylabel("Percent Change in Price")
+plt.show()</code></pre>
+  </body>
+
+<br>
+<div class="editorContainer" id="script">
+</div>
+
+<img src="static/losers.PNG" width="75%">
+
+<br>
+<h2>Most Dramatic Stocks</h2>
+
+<br>
+<p>
+These are the stocks with the largest difference between the low and high stock price at any point during the year.
+</p>
+
+<img src="static/dramatics.PNG" width="75%">
+
+<br>
+<br>
+<h2>World's Wealthiest People</h2>
+
+<br>
+<p>As you can see, Elon Musk had a good year.</p>
+
+<br>
+<img src="static/richest.PNG" width="75%">
 
 {% endblock %}

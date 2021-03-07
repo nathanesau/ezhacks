@@ -2,6 +2,7 @@
 populate sqlite3 database for web-app
 """
 import sqlite3
+import requests
 
 SYMBOLS = [
     "MMM",
@@ -516,9 +517,21 @@ BASE_URL = "https://ezhacks.nyc3.digitaloceanspaces.com"
 conn = sqlite3.connect('/mnt/d/ezhacks/ezhacks-app/app.db')
 cursor = conn.cursor()
 
+api = f"https://finnhub.io/api/v1//stock/symbol?exchange=US&token=c11tv0v48v6p2grlkudg"
+response = requests.get(api)
+data = response.json()
+
 for i, symbol in enumerate(SYMBOLS):
     url = f"{BASE_URL}/{symbol}.csv"
-    cursor.execute(f"INSERT INTO market_data(id, symbol, url) VALUES({i+1}, '{symbol}', '{url}')")
+
+    description = ''
+    for item in data: # VERY SLOW, oh well
+        if symbol == item['displaySymbol']:
+            description = item['description']
+            description = description.replace("'", '')
+            break    
+
+    cursor.execute(f"INSERT INTO market_data(id, symbol, url, description) VALUES({i+1}, '{symbol}', '{url}', '{description}')")
 
 # additional - add ZM to table
 # additional - add BRK.b to table

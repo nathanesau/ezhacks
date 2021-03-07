@@ -4,10 +4,70 @@
 {% block app_content %}
 <h1>Explore</h1>
 
-<p>Companies</p>
+<br>
+<p>This page provides the data we used for each of the companies. Click on a company to learn more about that company.</p>
 
-<ul>
-<li></li>
-</ul>
+<br>
+<h2>Companies</h2>
 
+<script>
+    function apply_search() {
+        const search_value = document.getElementById('search_value').value;
+        const base_url = window.location.href.split(/[?#]/)[0];
+        const refresh_url = base_url + '?search_value=' + search_value;
+        window.location.assign(refresh_url);
+    }
+</script>
+
+<span>
+<input autocomplete="off" style="width:25%; display:inline;" id="search_value" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+<button id="search_button" class="btn btn-success" type="submit"><i class="fa fa-search" onclick="apply_search()"></i></button>
+</span>
+
+<script>
+var input = document.getElementById("search_value");
+
+// Execute a function when the user releases a key on the keyboard
+input.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) { // enter
+    event.preventDefault();
+    apply_search();
+    }
+});
+</script>
+
+{% if search_value %}
+<script>
+document.getElementById("search_value").focus();
+document.getElementById("search_value").value = "{{ search_value }}";
+</script>
+{% endif %}
+
+<p>{{ pagination.info }}</p>
+<table id="table1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Symbol</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    {% for item in items %}
+    <tr class="clickable-row" data-href="{{ url_for('main.company', id=item.id) }}" method=POST>
+    <td>{{ item.id}}</td>
+    <td>{{ item.symbol }}</td>
+    <td>{{ item.description }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{{ pagination.links }} 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+{% if company.description %}
+<h1>{{ company.symbol }} ({{ company.description }})</h1>
+{% else %}
+<h1>{{ company.symbol }}</h1>
+{% endif %}
+
+{% if items %}
+<p>Data from 01/01/2020 to 01/01/2021</p>
+
+<p>{{ pagination.info }}</p>
+<table id="table1">
+    <thead>
+        <tr>
+            <th>Week of 2020</th>
+            <th>Closing Price</th>
+            <th>Volume</th>
+        </tr>
+    </thead>
+    {% for item in items %}
+    <td>{{ item.week}}</td>
+    <td>{{ item.closing_price }}</td>
+    <td>{{ item.volume }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{{ pagination.links }} 
+{% else %}
+<br>
+<p>No data available</p>
+{% endif %}
+
+{% endblock %}
