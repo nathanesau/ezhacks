@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<h1>EZHacks2021</h1>
+
+<p>EZHacks2021 site powered by <code>dataprep</code> and <code>flask</code>. By <a href="https://github.com/mshvarts">Max Shvarts</a>, <a href="https://github.com/shuimingzi">Shumingzi</a> and <a href="https://github.com/nathanesau">Nathan Esau</a>.</p>
+
+<ul>
+<li>The site is related to the stock market. We use <code>finnhub</code> to collect the stock data.</li>
+<li>We show the winners and losers from the pandemic.</li>
+<li>We show that the wealth of the world's richest people skyrocketted during the pandemic.</li>
+</ul>
+
+<h2>Part 1: Timeline of Pandemic</h2>
+
+<img src="static/timeline.PNG" width="75%">
+
+<h2>Part 2: Winners and Losers of the Pandemic</h2>
+
+<img src="static/plot.PNG" width="75%">
+
+<h2>Part 3: The World's Wealthiest People</h2>
+
+<img src="static/primary_holding.PNG" width="75%">
+
+{% endblock %}
