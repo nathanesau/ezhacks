@@ -1,0 +1,53 @@
+{
+    "version": 1,
+    "request": {
+        "url": "https://finnhub.io/api/v1/calendar/earnings",
+        "method": "GET",
+        "params": {
+            "symbol": false,
+            "from_": false,
+            "from": {
+                "required": false,
+                "removeIfEmpty": true,
+                "template": "{{from_}}",
+                "fromKey": [
+                    "from_"
+                ]
+            },
+            "to": false,
+            "resolution": false,
+            "token": false
+        }
+    },
+    "response": {
+        "ctype": "application/json",
+        "tablePath": "$.stock_data[*]",
+        "schema": {
+            "c": {
+                "target": "$.c",
+                "type": "array"
+            },
+            "h": {
+                "target": "$.h",
+                "type": "array"
+            },
+            "l": {
+                "target": "$.l",
+                "type": "array"
+            },
+            "o": {
+                "target": "$.o",
+                "type": "array"
+            },
+            "s": {
+                "target": "$.s",
+                "type": "string"
+            },
+            "t": {
+                "target": "$.t",
+                "type": "array"
+            }
+        },
+        "orient": "records"
+    }
+}

@@ -4,23 +4,27 @@ creates winners plot
 creates losers plot
 creates dramatics plot
 """
-import requests
+#import requests
 from datetime import datetime
 import os
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+import asyncio
+from dataprep.connector import connect
 
 BASEDIR = os.path.dirname(os.path.realpath(__file__))
-DATA_FOLDER = f"{BASEDIR}/company_data"
+DATA_FOLDER = f"{BASEDIR}/../data/company_data"
 
-def get_company_data(company_name):
+async def get_company_data(company_name):
     # requests syntax
-    response = requests.get((
-        f"https://finnhub.io/api/v1/stock/candle?resolution=W&from={int(datetime(2020,1,1).timestamp())}"
-        f"&to={int(datetime(2021,1,1).timestamp())}&symbol={company_name}&token=c11tv0v48v6p2grlkudg"
-    ))
-    data = response.json()
+    # response = requests.get((
+    #     f"https://finnhub.io/api/v1/stock/candle?resolution=W&from={int(datetime(2020,1,1).timestamp())}"
+    #     f"&to={int(datetime(2021,1,1).timestamp())}&symbol={company_name}&token=c11tv0v48v6p2grlkudg"
+    # ))
+    # data = response.json()
+    conn_finnhub = connect("../ezhacks-data")
+    data = await conn_finnhub.query('stock_data', symbol=company_name, token="c11tv0v48v6p2grlkudg", from_=int(datetime(2020,1,1).timestamp()), to=int(datetime(2021,1,1).timestamp()))
     return data
 
 def get_company_names():
@@ -72,12 +76,16 @@ if __name__ == "__main__":
     
     # uncomment to collect all data
     # upload data to https://ezhacks.nyc3.digitaloceanspaces.com
-    #path = os.path.join(DATA_FOLDER, "MC")
-    #saveToFile(path, get_company_data("MC"))
+    path = os.path.join(DATA_FOLDER, "MC")
+    loop = asyncio.get_event_loop()
+    data = loop.run_until_complete(get_company_data("MC"))
+    print(data.c)
+    #data = asyncio.run(get_company_data("MC"))
+    saveToFile(path, data)
     #path = os.path.join(DATA_FOLDER, "BRK.A")
     #saveToFile(path, get_company_data("BRK.A"))
     #save_companies_data()
-
+"""
     differences = []
     volatilities = []
 
@@ -134,3 +142,4 @@ if __name__ == "__main__":
     #plt.xlabel("Week of 2020")
     #plt.ylabel("Percent Change in Price")
     #plt.savefig('out.png')
+"""
