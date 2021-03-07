@@ -1,2 +1,11 @@
-dataprep==0.2.15
-Flask==1.1.2
+flask_bootstrap==3.3.7.1
+flask_httpauth==4.0.0
+flask_migrate==2.5.3
+flask_sqlalchemy==2.4.4
+flask_wtf==0.14.3
+flask_paginate==0.7.1
+flask_cors==3.0.9
+gunicorn==19.7.1
+requests==2.18.4
+flask==1.1.2
+python-dotenv==0.15.0
