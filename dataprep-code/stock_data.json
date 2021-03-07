@@ -1,0 +1,56 @@
+{
+    "version": 1,
+    "request": {
+        "url": "https://finnhub.io/api/v1/stock/candle",
+        "method": "GET",
+        "authorization": {
+            "type": "QueryParam",
+            "keyParam": "token"
+        },
+        "params": {
+            "symbol": false,
+            "from_": false,
+            "from": {
+                "required": false,
+                "removeIfEmpty": true,
+                "template": "{{from_}}",
+                "fromKey": [
+                    "from_"
+                ]
+            },
+            "to": false,
+            "resolution": false
+        }
+    },
+    "response": {
+        "ctype": "application/json",
+        "tablePath": "$.stock_data[*]",
+        "schema": {
+            "c": {
+                "target": "$.c",
+                "type": "string"
+            },
+            "h": {
+                "target": "$.h",
+                "type": "string"
+            },
+            "l": {
+                "target": "$.l",
+                "type": "string"
+            },
+            "o": {
+                "target": "$.o",
+                "type": "string"
+            },
+            "s": {
+                "target": "$.s",
+                "type": "string"
+            },
+            "t": {
+                "target": "$.t",
+                "type": "string"
+            }
+        },
+        "orient": "records"
+    }
+}

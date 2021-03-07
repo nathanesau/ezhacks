@@ -31,6 +31,7 @@ docker run -p 80:80 --name ezhacks-app -d nathanesau/ezhacks:ezhacks-app
 ## Folder Structure
 
 * data: contains the data, obtained using [finnhub](https://finnhub.io/) and [dataprep](https://github.com/sfu-db/dataprep)
+* dataprep-code: contains our dataprep-code
 * ezhacks-app: contains the flask app
 * ezhacks-nginx: contains the nginx configuration
 * scripts: contains scripts for creating graphs, populating db, etc.
